@@ -87,8 +87,12 @@ static void timerHandler( int sig, siginfo_t *si, void *uc )
 
 	/* TODO This Section - 2 */
 	// Officially complete the step using completedSteps and completeCount
+	comp_item->PrintComplete();
+	completedSteps->push_back(comp_item->id);
+	completeCount++;
 
 	// Ready to remove that dependency, call the trigger for the appropriate handler
+	kill(getpid(), SIGUSR1); //send signal to itself to trigger RemoveDepHandler
 	/* End Section - 2 */
 }
 
@@ -98,6 +102,13 @@ static void timerHandler( int sig, siginfo_t *si, void *uc )
 void RemoveDepHandler(int sig) {
 	/* TODO This Section - 3 */
 	// Foreach step that has been completed since last run, remove it as a dependency
+	static size_t lastIndex = 0;
+	for (size_t i = lastIndex; i < completedSteps->size(); i++) {
+		int dep_id = completedSteps->at(i);
+		recipeSteps->RemoveDependency(dep_id);
+	}
+	lastIndex = completedSteps->size();
+	
 	/* End Section - 3 */
 }
 
