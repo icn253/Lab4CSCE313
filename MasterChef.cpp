@@ -102,12 +102,12 @@ static void timerHandler( int sig, siginfo_t *si, void *uc )
 void RemoveDepHandler(int sig) {
 	/* TODO This Section - 3 */
 	// Foreach step that has been completed since last run, remove it as a dependency
-	static size_t lastIndex = 0;
-	for (size_t i = lastIndex; i < completedSteps->size(); i++) {
+	static size_t compIndex = 0;
+	for (size_t i = compIndex; i < completedSteps->size(); i++) {
 		int dep_id = completedSteps->at(i);
 		recipeSteps->RemoveDependency(dep_id);
 	}
-	lastIndex = completedSteps->size();
+	compIndex = completedSteps->size();
 	
 	/* End Section - 3 */
 }
